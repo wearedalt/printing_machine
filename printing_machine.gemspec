@@ -23,6 +23,6 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
 
-  s.add_dependency('prawn')
+  s.add_dependency('prawn', '1.0.0.rc1')
   s.add_dependency('barby')
 end
