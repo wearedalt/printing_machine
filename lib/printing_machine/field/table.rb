@@ -59,7 +59,7 @@ module PrintingMachine
         return unless value
         barcode = ::Barby::Code128C.new(value)
         barcode_image = barcode.to_datastream(xdim: 2, height: 70)
-        path = 'tmp/tmp_barcode.png'
+        path = "tmp/tmp_barcode_#{value}.png"
         barcode_image.save(path) # OPTIMIZE : Is there a way to avoid writing a file ?
         image = { image: path, scale: 0.35} # TODO : Make it possible to chose the size
       end
