@@ -10,6 +10,7 @@ module PrintingMachine
         height  = parameters[:height]
 
         @document.rectangle [point_x, point_y], width, height
+        @document.stroke
       end
     end
   end

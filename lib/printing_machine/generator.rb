@@ -6,12 +6,13 @@ module PrintingMachine
     attr_accessor :config
     attr_writer   :transforations
 
-    def initialize(templates_path=nil, template=nil)
+    def initialize(templates_path=nil, template=nil, options={})
       YAML::ENGINE.yamler = 'syck'
       self.config         = PrintingMachine.config.clone
       @templates_path     = templates_path
       @analyzer           = PrintingMachine::Analyzer::YamlAnalyzer.new(templates_path, template) # TODO : Move this in the config so we can switch analyzer type later
       @transformations    = PrintingMachine::Transformations.new
+      @page_name          = options[:page_name] || :page
     end
 
     def generate_pdf(data, output_file=nil)
@@ -34,16 +35,14 @@ module PrintingMachine
       parameters = @analyzer.parameters
       options    = @analyzer.options
       fonts      = @analyzer.fonts
-      pages      = @analyzer.pages
       pdf_data   = @transformations.transform(data)
       @document  = PrintingMachine::Document.new(parameters, pdf_data)
 
       @document.print_pages_numbers options[:print_pages_numbers] if options[:print_pages_numbers]
       @document.register_fonts(fonts)
-      pages.each do |page, _|
-        page_instructions = @analyzer.get_page(page) # TODO : Find a better name than instructions
-        process_page(page_instructions)
-      end
+
+      page_instructions = @analyzer.get_page(@page_name) # TODO : Find a better name than instructions
+      process_page(page_instructions)
 
       @document.render output_file
     end
