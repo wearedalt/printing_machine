@@ -4,9 +4,10 @@ module PrintingMachine
 
       attr_reader :parameters, :options, :fonts, :pages
 
-      def initialize(templates_path, template)
+      def initialize(templates_path, template, options={})
         @templates_path = templates_path
-        @template       = YAML.load_file(File.join(templates_path, template))
+        loaded_yaml     = YAML.load_file(File.join(templates_path, template))
+        @template       = loaded_yaml.deep_merge(options)
 
         self.analyze_template
       end
