@@ -7,7 +7,6 @@ module PrintingMachine
     attr_writer   :transforations
 
     def initialize(templates_path=nil, template=nil, options={})
-      YAML::ENGINE.yamler = 'syck'
       self.config         = PrintingMachine.config.clone
       @templates_path     = templates_path
       @analyzer           = PrintingMachine::Analyzer::YamlAnalyzer.new(templates_path, template, options) # TODO : Move this in the config so we can switch analyzer type later
